@@ -2,8 +2,7 @@
 #include <vector>
 #include <string>
 #include <random>
-// #include <algorithm>
-// #include <cstdint>
+
 #include "Game.h"
 
 
@@ -64,29 +63,11 @@ int getRandomInt(int min, int max) {
     return distribution(gen); // Generate and return a random integer
 }
 
-void makeFrame(char sol[m][n], int k, int l)
-{
-    char frame{'1'};
-    std::cout << k << std::endl;
-    std::cout << l << std::endl;
-    for (int i = k-1; i < k+2; i++) {
-        for (int j = l-1; j < l+2; j++) {
-            if (k == 1 || l ==1 ){
-                continue;
-            }
-            else {
-                sol[i][j] = frame;
-            }
-        }
-    }
-}
-
 void placeBombs(char sol[m][n])
 {
     for (int i = 0 ; i < nr_bombs; i++) {
         int random_m = getRandomInt(1, m-1);
         int random_n = getRandomInt(1, n-1);
-        // makeFrame(sol, random_m, random_n);
         sol[random_m][random_n] = bomb;
         std::cout << "bomb placed in: " << std::endl;
         std::cout << random_m << std::endl;
@@ -181,5 +162,4 @@ void game()
 }
 
 // #TODO:   1. don't place bombs in the same place
-//          2. increase the numbers when 2 bombs are close together
 //          3. increase playground
