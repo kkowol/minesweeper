@@ -10,6 +10,7 @@ const int m = 7, n=7;
 const int nr_bombs{4};
 const char bomb{'@'};
 
+
 void printField(char arr[m][n])
 {
     for (int i = 0; i < m; i++) {
@@ -20,11 +21,8 @@ void printField(char arr[m][n])
     }
 }
 
-void createPlayground(char mat[m][n])
-{
-    char X{'X'} ;
-    
 
+void createPlayground(char arr[m][n], char fillSymbol){
     std::vector<std::string> firstColumn = {" ","A","B","C","D","E","F"};
     std::vector<std::string> firstRow = {" ","1","2","3","4","5","6"};   
 
@@ -32,22 +30,22 @@ void createPlayground(char mat[m][n])
         for (int j = 0; j < n; j++) {
             if (i == 0)
             {
-                mat[0][j] = static_cast<int>(firstRow[j][0]);
+                arr[0][j] = static_cast<int>(firstRow[j][0]);
             }
             else {
                 if (j == 0){
-                    mat[i][0] = static_cast<int>(firstColumn[i][0]);
+                    arr[i][0] = static_cast<int>(firstColumn[i][0]);
                 }
                 else {
-                    mat[i][j] = X;
+                    arr[i][j] = fillSymbol;
                 }
             }
         }
     }
-    // printField(mat);
 }
 
-void copyArray(char source[m][n], char destination[m][n]) {
+
+void copyArray(char source[m][n], char destination[m][n]){
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             destination[i][j] = source[i][j];
@@ -55,33 +53,31 @@ void copyArray(char source[m][n], char destination[m][n]) {
     }
 }
 
+
 // Function to generate a random integer in the range [min, max]
-int getRandomInt(int min, int max) {
+int getRandomInt(int min, int max){
     std::random_device rd;  // Create a random device
     std::mt19937 gen(rd()); // Create a Mersenne Twister pseudo-random number generator
     std::uniform_int_distribution<int> distribution(min, max); // Create a uniform distribution
     return distribution(gen); // Generate and return a random integer
 }
 
-void placeBombs(char sol[m][n])
-{
-    for (int i = 0 ; i < nr_bombs; i++) {
+
+void placeBombs(char arr[m][n]){
+    int idx{0};
+    while (idx < nr_bombs){
         int random_m = getRandomInt(1, m-1);
         int random_n = getRandomInt(1, n-1);
-        sol[random_m][random_n] = bomb;
-        std::cout << "bomb placed in: " << std::endl;
-        std::cout << random_m << std::endl;
-        std::cout << random_n << std::endl;
-        
+        if (arr[random_m][random_n] != bomb){
+            arr[random_m][random_n] = bomb;
+            idx++;
+        }
     }
-    printField(sol);
-    // std::cout << random_m << std::endl;
-    // std::cout << random_n << std::endl;
-    
 }
 
-int checkNeighbors(char v)
-{ // counter for field
+
+int checkNeighbors(char v){ 
+    // counter for field
     char f{}; // in ASCII code the numbers start from 48
     int nb{};
     char neighbors[8] = {'1', '2', '3', '4', '5', '6', '7', '8'};
@@ -103,9 +99,7 @@ int checkNeighbors(char v)
 }
 
 
-
-void placeNumbers(char sol[m][n])
-{
+void placeNumbers(char sol[m][n]){
     int nb = {};
     char neighbors[8] = {'1', '2', '3', '4', '5', '6', '7', '8'};
     for (int i = 1; i < m; i++) {
@@ -141,25 +135,57 @@ void placeNumbers(char sol[m][n])
         }
     }
     std::cout << ' ' << std::endl;
-    printField(sol);
-    // std::cout << random_m << std::endl;
-    // std::cout << random_n << std::endl;
-    
 }
+
+
+void gameState(char arr[m][n]){
+    printField(arr);
+}
+
+
+void getInputs(char* inp1, char* inp2){
+    std::string userInput;
+    std::getline(std::cin, userInput);
+    
+    if (userInput.length() == 2) { //#TODO: check also if numbers and alphabet is in the right range
+        *inp1 = (userInput)[0];
+        *inp2 = (userInput)[1];
+    } else {
+        std::cout << "\n** ERROR ** Please enter only two characters ** ERROR **\n" << std::endl;
+        *inp1 = '\0';
+        *inp2 = '\0';
+    }
+}
+
+
+void move(char arr1[m][n], char arr2[m][n]){  
+    char input1, input2;
+    std::cout << "please enter position in the form e.g. A1" << std::endl;
+    getInputs(&input1, &input2);
+    std::cout << "First character: " << input1 << std::endl;
+    std::cout << "First character: " << input2 << std::endl;
+}
+
 
 void game()
 {
-    std::cout << "select a field (A-F for rows, 1-6 for columns)" << std::endl;
-    char mat[m][n];
-    createPlayground(mat);
-    std::cout << ' ' << std::endl;
-    char sol[m][n]; // make a copy for the solution
-    copyArray(mat, sol);
+    // std::cout << "select a field (A-F for rows, 1-6 for columns)" << std::endl;
+    char playground[m][n];
+    char solution[m][n];
 
-    placeBombs(sol);
-    placeNumbers(sol);
+    createPlayground(playground, 'X');
+    createPlayground(solution, ' ');
+    
+    placeBombs(solution);
+    placeNumbers(solution);
+
+    while (true){
+        gameState(playground);
+        move(playground, solution);
+    }
+
+    // delete[] playground;
     std::cout << "done ..." << std::endl;
 }
 
-// #TODO:   1. don't place bombs in the same place
-//          3. increase playground
+// #TODO: increase playground
