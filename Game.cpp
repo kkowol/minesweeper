@@ -190,7 +190,8 @@ bool move(char arr1[m][n], char arr2[m][n]){
         arr1[playM][playN] = arr2[playM][playN];
         return true;
     } else {
-        std::cout << "\nSorry, you have lost. Try again. " << std::endl;
+        std::cout << "\nSorry, you lost. Try again.\n" << std::endl;
+        printField(arr2);
         return false;
     }
 }
@@ -198,7 +199,8 @@ bool move(char arr1[m][n], char arr2[m][n]){
 
 void game()
 {
-    // std::cout << "select a field (A-F for rows, 1-6 for columns)" << std::endl;
+    auto bombs = std::to_string(nr_bombs);
+    std::cout << "find " + bombs + " bombs!!!" << std::endl;
     char playground[m][n];
     char solution[m][n];
 
@@ -213,9 +215,6 @@ void game()
         gameState(playground);
         game = move(playground, solution);
     }
-
-    // delete[] playground;
-    std::cout << "done ..." << std::endl;
 }
 
 // #TODO:   * increase playground
