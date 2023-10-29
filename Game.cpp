@@ -143,7 +143,7 @@ void gameState(char arr[m][n]){
 }
 
 
-void getInputs(char* inp1, char* inp2){
+void getInput(char* inp1, char* inp2){
     std::string userInput;
     std::getline(std::cin, userInput);
     
@@ -158,12 +158,41 @@ void getInputs(char* inp1, char* inp2){
 }
 
 
-void move(char arr1[m][n], char arr2[m][n]){  
+void input2Position(char* inp1, char* inp2, int* playM, int* playN){
+    char row[6] = {'A', 'B', 'C', 'D', 'E', 'F'};
+    char col[6] = {'1', '2', '3', '4', '5', '6'};
+    int idx=0;
+    int jdx=0;
+    for (char r : row){
+        if (r == inp1[0]){
+            playM[0]=jdx+1;
+        }
+        jdx++;
+    }
+    for (char c : col){
+        if (c == inp2[0]){
+            playN[0] =idx+1;
+        }
+        idx++;
+    }    
+}
+
+
+bool move(char arr1[m][n], char arr2[m][n]){  
     char input1, input2;
-    std::cout << "please enter position in the form e.g. A1" << std::endl;
-    getInputs(&input1, &input2);
-    std::cout << "First character: " << input1 << std::endl;
-    std::cout << "First character: " << input2 << std::endl;
+    int playM, playN; // players guess
+    std::cout << "\nplease enter position in the form e.g. A1" << std::endl;
+    getInput(&input1, &input2);
+    std::cout << "" << std::endl;
+    input2Position(&input1, &input2, &playM, &playN);
+    
+    if (arr2[playM][playN] != bomb){
+        arr1[playM][playN] = arr2[playM][playN];
+        return true;
+    } else {
+        std::cout << "\nSorry, you have lost. Try again. " << std::endl;
+        return false;
+    }
 }
 
 
@@ -179,13 +208,17 @@ void game()
     placeBombs(solution);
     placeNumbers(solution);
 
-    while (true){
+    bool game = true;
+    while (game){
         gameState(playground);
-        move(playground, solution);
+        game = move(playground, solution);
     }
 
     // delete[] playground;
     std::cout << "done ..." << std::endl;
 }
 
-// #TODO: increase playground
+// #TODO:   * increase playground
+//          * use "o" to mark bombs
+//          * define win
+//          * erase some empty areas
