@@ -181,7 +181,7 @@ void input2Position(char* inp1, char* inp2, int* playM, int* playN){
 bool move(char arr1[m][n], char arr2[m][n]){  
     char input1, input2;
     int playM, playN; // players guess
-    std::cout << "\nplease enter position in the form e.g. A1" << std::endl;
+    std::cout << "\nplease enter position" << std::endl;
     getInput(&input1, &input2);
     std::cout << "" << std::endl;
     input2Position(&input1, &input2, &playM, &playN);
@@ -193,6 +193,24 @@ bool move(char arr1[m][n], char arr2[m][n]){
         std::cout << "\nSorry, you lost. Try again.\n" << std::endl;
         printField(arr2);
         return false;
+    }
+}
+
+
+bool checkWin(char arr[m][n]){
+    int foundX = 0;
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            if (arr[i][j] == 'X'){
+                foundX++;
+            }
+        }
+    }
+    if (foundX == nr_bombs){
+        std::cout << "\nCongratulations, you are victorious.\n" << std::endl;
+        return false;
+    } else {
+        return true;
     }
 }
 
@@ -214,10 +232,10 @@ void game()
     while (game){
         gameState(playground);
         game = move(playground, solution);
+        game = checkWin(playground);
     }
 }
 
 // #TODO:   * increase playground
 //          * use "o" to mark bombs
-//          * define win
 //          * erase some empty areas
