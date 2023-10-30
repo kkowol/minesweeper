@@ -148,7 +148,7 @@ void getInput(char* inp1, char* inp2){
     std::getline(std::cin, userInput);
     
     if (userInput.length() == 2) { //#TODO: check also if numbers and alphabet is in the right range
-        *inp1 = (userInput)[0];
+        *inp1 = toupper((userInput)[0]); // change to capital alphabet
         *inp2 = (userInput)[1];
     } else {
         std::cout << "\n** ERROR ** Please enter only two characters ** ERROR **\n" << std::endl;
