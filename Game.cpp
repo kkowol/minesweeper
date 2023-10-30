@@ -178,6 +178,48 @@ void input2Position(char* inp1, char* inp2, int* playM, int* playN){
 }
 
 
+void cascade(char arr1[m][n], char arr2[m][n], int* playM, int* playN){
+// delete the frame around the chosen field if there is no bomb 
+    bool bombAsNeighbor = false;
+    for (int k : {-1, 0, 1 }){
+        for (int l : {-1, 0, 1 }){
+            if (k==0 && l==0){ // middle point irrelevant
+                continue;
+            // upper and left boundary
+            } else if ((playM[0] == 1 && k == -1) || (playN[0] == 1 && l == -1)){
+                continue;
+            // lower and right boundary
+            } else if ((playM[0] == m && k == 1) || (playN[0] == n && l == 1)){
+                continue;
+            // set value to true if bomb is neighbor
+            } else {
+                if (arr2[playM[0]+k][playN[0]+l] == bomb){
+                    bombAsNeighbor = true;          
+                }
+            }
+        }    
+    }
+    if (!bombAsNeighbor){
+        for (int k : {-1, 0, 1 }){
+            for (int l : {-1, 0, 1 }){
+                if (k==0 && l==0){ // middle point irrelevant
+                    continue;
+                // upper and left boundary
+                } else if ((playM[0] == 1 && k == -1) || (playN[0] == 1 && l == -1)){
+                    continue;
+                // lower and right boundary
+                } else if ((playM[0] == m && k == 1) || (playN[0] == n && l == 1)){
+                    continue;
+                // set value to true if bomb is neighbor
+                } else {
+                    arr1[playM[0]+k][playN[0]+l] = arr2[playM[0]+k][playN[0]+l];
+                }
+            }
+        }
+    }
+}
+
+
 bool move(char arr1[m][n], char arr2[m][n]){  
     char input1, input2;
     int playM, playN; // players guess
@@ -188,6 +230,7 @@ bool move(char arr1[m][n], char arr2[m][n]){
     
     if (arr2[playM][playN] != bomb){
         arr1[playM][playN] = arr2[playM][playN];
+        cascade(arr1, arr2, &playM, &playN);
         return true;
     } else {
         std::cout << "\nSorry, you lost. Try again.\n" << std::endl;
@@ -231,6 +274,7 @@ void game()
     bool game = true;
     while (game){
         gameState(playground);
+        // gameState(solution);
         game = move(playground, solution);
         game = checkWin(playground);
     }
@@ -238,4 +282,3 @@ void game()
 
 // #TODO:   * increase playground
 //          * use "o" to mark bombs
-//          * erase some empty areas
