@@ -275,8 +275,7 @@ void game()
     while (game){
         gameState(playground);
         // gameState(solution);
-        game = move(playground, solution);
-        game = checkWin(playground);
+        game = move(playground, solution) && checkWin(playground);
     }
 }
 
