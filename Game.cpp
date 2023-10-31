@@ -9,6 +9,7 @@
 const int m = 7, n=7;
 const int nr_bombs{4};
 const char bomb{'@'};
+const char flag{'O'};
 
 
 void printField(char arr[m][n])
@@ -134,17 +135,28 @@ void gameState(char arr[m][n]){
 }
 
 
-void getInput(char* inp1, char* inp2){
+bool getInput(char* inp1, char* inp2, char* inp3){
     std::string userInput;
     std::getline(std::cin, userInput);
     
-    if (userInput.length() == 2) { //#TODO: check also if numbers and alphabet is in the right range
-        *inp1 = toupper((userInput)[0]); // change to capital alphabet
+    //#TODO: check also if numbers and alphabet is in the right range
+    if (userInput.length() == 2) { 
+        *inp1 = toupper((userInput)[0]); // change to capital letter
         *inp2 = (userInput)[1];
+        *inp3 = '\0';
+        return true;
+    } else if (userInput.length() == 5){
+        *inp1 = toupper((userInput)[0]); // change to capital letter
+        *inp2 = (userInput)[1];
+        *inp3 = (userInput)[4]; // flag
+        return true;
     } else {
-        std::cout << "\n** ERROR ** Please enter only two characters ** ERROR **\n" << std::endl;
+        std::cout << "\n** ERROR ** Please enter only TWO characters \\
+        or FIVE to place a flag in the form: \'a1 -o\' ** ERROR **\n" << std::endl;
         *inp1 = '\0';
         *inp2 = '\0';
+        *inp3 = '\0';
+        return false;
     }
 }
 
@@ -212,14 +224,18 @@ void cascade(char arr1[m][n], char arr2[m][n], int* playM, int* playN){
 
 
 bool move(char arr1[m][n], char arr2[m][n]){  
-    char input1, input2;
+    char input1, input2, input3;
     int playM, playN; // players guess
     std::cout << "\nplease enter position" << std::endl;
-    getInput(&input1, &input2);
+
+    while( getInput(&input1, &input2, &input3) == false){
+    }
+    
     std::cout << "" << std::endl;
     input2Position(&input1, &input2, &playM, &playN);
-    
-    if (arr2[playM][playN] != bomb){
+    if (input3 != '\0'){
+        arr1[playM][playN] = flag;
+    } else if (arr2[playM][playN] != bomb){
         arr1[playM][playN] = arr2[playM][playN];
         cascade(arr1, arr2, &playM, &playN);
         return true;
