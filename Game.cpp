@@ -45,15 +45,6 @@ void createPlayground(char arr[m][n], char fillSymbol){
 }
 
 
-void copyArray(char source[m][n], char destination[m][n]){
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            destination[i][j] = source[i][j];
-        }
-    }
-}
-
-
 // Function to generate a random integer in the range [min, max]
 int getRandomInt(int min, int max){
     std::random_device rd;  // Create a random device
@@ -165,13 +156,13 @@ void input2Position(char* inp1, char* inp2, int* playM, int* playN){
     int jdx=0;
     for (char r : row){
         if (r == inp1[0]){
-            playM[0]=jdx+1;
+            *playM=jdx+1;
         }
         jdx++;
     }
     for (char c : col){
         if (c == inp2[0]){
-            playN[0] =idx+1;
+            *playN =idx+1;
         }
         idx++;
     }    
@@ -186,14 +177,14 @@ void cascade(char arr1[m][n], char arr2[m][n], int* playM, int* playN){
             if (k==0 && l==0){ // middle point irrelevant
                 continue;
             // upper and left boundary
-            } else if ((playM[0] == 1 && k == -1) || (playN[0] == 1 && l == -1)){
+            } else if ((*playM == 1 && k == -1) || (*playN == 1 && l == -1)){
                 continue;
             // lower and right boundary
-            } else if ((playM[0] == m && k == 1) || (playN[0] == n && l == 1)){
+            } else if ((*playM == m && k == 1) || (*playN == n && l == 1)){
                 continue;
             // set value to true if bomb is neighbor
             } else {
-                if (arr2[playM[0]+k][playN[0]+l] == bomb){
+                if (arr2[*playM+k][*playN+l] == bomb){
                     bombAsNeighbor = true;          
                 }
             }
@@ -205,14 +196,14 @@ void cascade(char arr1[m][n], char arr2[m][n], int* playM, int* playN){
                 if (k==0 && l==0){ // middle point irrelevant
                     continue;
                 // upper and left boundary
-                } else if ((playM[0] == 1 && k == -1) || (playN[0] == 1 && l == -1)){
+                } else if ((*playM == 1 && k == -1) || (*playN == 1 && l == -1)){
                     continue;
                 // lower and right boundary
-                } else if ((playM[0] == m && k == 1) || (playN[0] == n && l == 1)){
+                } else if ((*playM == m && k == 1) || (*playN == n && l == 1)){
                     continue;
                 // set value to true if bomb is neighbor
                 } else {
-                    arr1[playM[0]+k][playN[0]+l] = arr2[playM[0]+k][playN[0]+l];
+                    arr1[*playM+k][*playN+l] = arr2[*playM+k][*playN+l];
                 }
             }
         }
@@ -251,6 +242,7 @@ bool checkWin(char arr[m][n]){
     }
     if (foundX == nr_bombs){
         std::cout << "\nCongratulations, you are victorious.\n" << std::endl;
+        printField(arr);
         return false;
     } else {
         return true;
