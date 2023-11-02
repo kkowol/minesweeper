@@ -223,7 +223,7 @@ void cascade(char arr1[m][n], char arr2[m][n], int* playM, int* playN){
 bool move(char arr1[m][n], char arr2[m][n]){  
     char input1, input2, input3;
     int playM, playN; // players guess
-    std::cout << "\nplease enter position" << std::endl;
+    std::cout << "\nplease enter position in the form: LetterNumber, e.g: \'a1\' (or to place a flag: \'a1 -o\')" << std::endl;
 
     while( getInput(&input1, &input2, &input3) == false){
     }
@@ -286,3 +286,4 @@ void game()
 }
 
 // #TODO:   * increase playground
+//          * implement recursion
