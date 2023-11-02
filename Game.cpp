@@ -118,11 +118,8 @@ void placeNumbers(char sol[m][n]){
                             }
                             
                         }
-                        
                     }
-                    
                 }    
-                
             } 
         }
     }
@@ -138,7 +135,7 @@ void gameState(char arr[m][n]){
 bool getInput(char* inp1, char* inp2, char* inp3){
     std::string userInput;
     std::getline(std::cin, userInput);
-    
+
     //#TODO: check also if numbers and alphabet is in the right range
     if (userInput.length() == 2) { 
         *inp1 = toupper((userInput)[0]); // change to capital letter
@@ -276,7 +273,7 @@ void game()
 
     createPlayground(playground, 'X');
     createPlayground(solution, ' ');
-    
+
     placeBombs(solution);
     placeNumbers(solution);
 
