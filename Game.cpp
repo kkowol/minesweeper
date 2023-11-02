@@ -245,18 +245,18 @@ bool move(char arr1[m][n], char arr2[m][n]){
 }
 
 
-bool checkWin(char arr[m][n]){
+bool checkWin(char arr1[m][n], char arr2[m][n]){
     int foundX = 0;
     for (int i = 1; i < m; i++) {
         for (int j = 1; j < n; j++) {
-            if (arr[i][j] == 'X'){
+            if (arr1[i][j] == flag && arr2[i][j] == bomb ){
                 foundX++;
             }
         }
     }
     if (foundX == nr_bombs){
         std::cout << "\nCongratulations, you are victorious.\n" << std::endl;
-        printField(arr);
+        printField(arr1);
         return false;
     } else {
         return true;
@@ -281,7 +281,7 @@ void game()
     while (game){
         gameState(playground);
         // gameState(solution);
-        game = move(playground, solution) && checkWin(playground);
+        game = move(playground, solution) && checkWin(playground, solution);
     }
 }
 
