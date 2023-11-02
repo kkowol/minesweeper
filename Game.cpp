@@ -235,6 +235,7 @@ bool move(char arr1[m][n], char arr2[m][n]){
     input2Position(&input1, &input2, &playM, &playN);
     if (input3 != '\0'){
         arr1[playM][playN] = flag;
+        return true;
     } else if (arr2[playM][playN] != bomb){
         arr1[playM][playN] = arr2[playM][playN];
         cascade(arr1, arr2, &playM, &playN);
@@ -288,4 +289,3 @@ void game()
 }
 
 // #TODO:   * increase playground
-//          * use "o" to mark bombs
